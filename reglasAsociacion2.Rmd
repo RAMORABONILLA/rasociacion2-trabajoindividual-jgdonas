@@ -9,7 +9,7 @@ output: html_document
 
 Vamos a realizar, uno a uno, todos los pasos descritos en el propio fichero del enunciado.
 
-## 1. Descargar a local el dataset online.csv (en repositorio de GitHub ClassRoom - directorio datasets).
+> ## 1. Descargar a local el dataset online.csv (en repositorio de GitHub ClassRoom - directorio datasets).
 
 Para hacer uso de un dataset, hay dos opciones: 
 
@@ -27,9 +27,45 @@ online <- read_csv("datasets/online.csv", col_names = FALSE)
 ```
 Nótese que hay que especificar que la primera fila no se corresponde con el nombre de las columnas, de lo contrario se perderá información de esa primera fila. Para ello, se deselecciona la opción "First row as names".
 
-## 2. Analizar la estructura, tipo,… del dataset.
-## 3. Analizar significado, estructura, tipo,… de cada columna.
-## 4. Comandos para ver las primeras filas y las últimas.
+> ## 2. Analizar la estructura, tipo,… del dataset.
+
+Para analizar la estructura de un dataset existen varias funciones, entre las cuales, las más típicas y usadas son
+
+* class()
+* mode()
+* str()
+
+El método **class()** nos devuelve una lista de las clases de las cuales hereda el objeto pasado como argumento. En este caso, como podemos comprobar, **online** hereda de las clases **tbl_df** (table dataframe), **tbl** (table) y **data.frame**(data frame)
+
+```{r}
+class(online)
+```
+
+
+La función **mode()**, por otro lado, nos informa del 'modo de almacenamiento' del objeto, que en este caso resulta ser de tipo **list**
+```{r}
+mode(online)
+```
+
+
+En último lugar, **str** nos muestra la **estructura** del objeto. Esta función acepta una gran variedad de argumentos, pero si la usamos pasándole únicamente el objeto cuya estructura queremos analizar, obtenemos como resultado:
+
+* las clases de las que hereda, al igual que hace la función **class()**
+* una muestra de los valores que podemos encontrar en cada uno de sus columnas, campos, o subestructuras, dependiendo del tipo de objeto con el que estemos trabajando.
+* un pequeño "sumario", similar a lo que nos devuelve la función **summary()**, que veremos más adelante, pero con mucho menos detalle.
+
+Es una función muy útil para visualizar estructuras de datos que contienen listas anidadas, aunque como gran parte de las funciones de R, puede ser usada con objetos de cualquier clase.
+
+```{r}
+str(online)
+```
+
+En est caso, observamos, como ya mencionamos antes, que **online** es un objeto que hereda de **tbl_df**,**tbl** y **data.frame**, que contiene 22343 registros de 3 variables cada uno, y que la primera columna contiene valores de tipo fecha, la segunda de tipo entero, y la tercera de tipo caracter, entre otra información.
+
+y **las cuales son muy recomendables usar cuando empezamos a trabajar con un conjunto de datos nuevos**, ya que nos van a dar muchas pistas de qué tenemos entre manos y nos ayudará a sacar mejor provecho y de forma más rápida toda la información que contiene.
+
+> ## 3. Analizar significado, estructura, tipo,… de cada columna.
+> ## 4. Comandos para ver las primeras filas y las últimas.
 
 Para ver las primera y últimas filas de una estructura de datos en R, es tan fácil como usar las funciones **head()** y **tail()**, que nos muestran respectivamente, las seis primeras y seis últimas filas de dicha estructura:
 
@@ -39,7 +75,7 @@ tail(online)
 ```
 
 
-## 5. Cambiar los nombres de las columnas: Fecha, IDcomprador,ProductoComprado.
+> ## 5. Cambiar los nombres de las columnas: Fecha, IDcomprador,ProductoComprado.
 
 Como el dataset original no contiene una fila donde se indique los nombres de columnas, vamos a cambiarlos por unos nombres que sean significativos y ayuden a entender mejor a cualquier persona que los use en adelante a entender qué datos tenemos entre mano.
 
@@ -64,27 +100,27 @@ head(online)
 ```
  
  
-## 6. Hacer un resumen (summary) del dataset y analizar toda la información detalladamente que devuelve el comando.
-## 7. Implementar una función que usando funciones vectoriales de R (apply, tapply, sapply,…) te devuelva un primer valor booleana para saber si hay valores NA en alguna columna del dataset. Si así lo fuera devolver sus índices y además sustituirlos por el valor 0.
-## 8. Calcular el número de filas del dataset.
-## 9. Calcula en cuántas fechas distintas se han realizado ventas.
-## 10. Calcula cuántos compradores distintos hay en el dataset.
-## 11. Calcula cuántos producto distintos se han vendido.
-## 12. Visualiza con distintos gráficos el dataset.
+> ## 6. Hacer un resumen (summary) del dataset y analizar toda la información detalladamente que devuelve el comando.
+> ## 7. Implementar una función que usando funciones vectoriales de R (apply, tapply, sapply,…) te devuelva un primer valor booleana para saber si hay valores NA en alguna columna del dataset. Si así lo fuera devolver sus índices y además sustituirlos por el valor 0.
+> ## 8. Calcular el número de filas del dataset.
+> ## 9. Calcula en cuántas fechas distintas se han realizado ventas.
+> ## 10. Calcula cuántos compradores distintos hay en el dataset.
+> ## 11. Calcula cuántos producto distintos se han vendido.
+> ## 12. Visualiza con distintos gráficos el dataset.
 
 * Los valores distintos de cada columna con varios tipos de gráficos.
 * Enfrenta unas variables contra otras para buscar patrones y comenta los patrones que puedas detectar.
 
-## 13. Usa split para construir a partir del dataset una lista con nombre lista.compra.usuarios en la que cada elemento de la lista es cada comprador junto con todos los productos que ha comprado (de forma similar a lo visto en clase en el recomendador).
-## 14. Hacer summary de lista.compra.usuarios.
-## 15. Contar cuántos usuarios hay en la lista lista.compra.usuarios.
-## 16. Detectar y eliminar duplicados en la lista.compra.usuarios (AYUDA: Usar lapply llamando a función unique).
-## 17. Contar cuántos usuarios hay en la lista después de eliminar duplicados.
-## 18. Convertir a tipo de datos transacciones. Guardar en Tlista.compra.usuarios.
-## 19. Hacer inspect de los dos primeros valores de Tlista.compra.usuarios.
-## 20. Buscar ayuda de itemFrequencyPlot para visualizar las 20 transacciones más frecuentes.
-## 21. Generar las reglas de asociación con 80% de confianza y 15% de soporte.
-## 22. Ver las reglas generadas y ordenalas por lift. Guarda el resultado en una variable nueva.
-## 23. Elimina todas las reglas redundantes de las dos formas vistas en clase. Calcula el % de reglas redundantes que había usando cada uno de los dos métodos.
-## 24. Dibuja las reglas ordenadas y no redundantes usando paquete arulesViz. Si son muchas visualiza las 20 primeras.
-## 25. MUY IMPORTANTE: Investigar algún otro paquete R relacionado con reglas de asociación (no visto en clase). Explicar su uso con un dataset y con ejemplos.
+> ## 13. Usa split para construir a partir del dataset una lista con nombre lista.compra.usuarios en la que cada elemento de la lista es cada comprador junto con todos los productos que ha comprado (de forma similar a lo visto en clase en el recomendador).
+> ## 14. Hacer summary de lista.compra.usuarios.
+> ## 15. Contar cuántos usuarios hay en la lista lista.compra.usuarios.
+> ## 16. Detectar y eliminar duplicados en la lista.compra.usuarios (AYUDA: Usar lapply llamando a función unique).
+> ## 17. Contar cuántos usuarios hay en la lista después de eliminar duplicados.
+> ## 18. Convertir a tipo de datos transacciones. Guardar en Tlista.compra.usuarios.
+> ## 19. Hacer inspect de los dos primeros valores de Tlista.compra.usuarios.
+> ## 20. Buscar ayuda de itemFrequencyPlot para visualizar las 20 transacciones más frecuentes.
+> ## 21. Generar las reglas de asociación con 80% de confianza y 15% de soporte.
+> ## 22. Ver las reglas generadas y ordenalas por lift. Guarda el resultado en una variable nueva.
+> ## 23. Elimina todas las reglas redundantes de las dos formas vistas en clase. Calcula el % de reglas redundantes que había usando cada uno de los dos métodos.
+> ## 24. Dibuja las reglas ordenadas y no redundantes usando paquete arulesViz. Si son muchas visualiza las 20 primeras.
+> ## 25. MUY IMPORTANTE: Investigar algún otro paquete R relacionado con reglas de asociación (no visto en clase). Explicar su uso con un dataset y con ejemplos.
