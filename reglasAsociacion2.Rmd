@@ -1,0 +1,62 @@
+---
+title: 'Reglas Asociacion #2'
+author: "José Antonio González Doñas"
+date: "4/19/2018"
+output: html_document
+---
+
+Vamos a realizar, uno a uno, todos los pasos descritos en el propio fichero del enunciado.
+
+## 1. Descargar a local el dataset online.csv (en repositorio de GitHub ClassRoom - directorio datasets).
+
+Para hacer uso de un dataset, hay dos opciones: 
+
+1. importarlo mediante la interfaz gráfica de RStudio:
+
+![Opción a elegir.](./imagenes/Screen Shot 2018-04-19 at 14.55.41.png)
+
+![Resultado tras importar.](./imagenes/Screen Shot 2018-04-19 at 15.12.45.png)
+
+2. mediante la instrucción read_csv()
+
+```{r}
+library(readr)
+online <- read_csv("datasets/online.csv", 
+    col_names = FALSE)
+View(online)
+```
+Nótese que hay que especificar que la primera fila no se corresponde con el nombre de las columnas, de lo contrario se perderá información de esa primera fila. Para ello, se deselecciona la opción "First row as names".
+
+```{r}
+
+```
+
+
+## 2. Analizar la estructura, tipo,… del dataset.
+## 3. Analizar significado, estructura, tipo,… de cada columna.
+## 4. Comandos para ver las primeras filas y las últimas.
+## 5. Cambiar los nombres de las columnas: Fecha, IDcomprador,ProductoComprado.
+## 6. Hacer un resumen (summary) del dataset y analizar toda la información detalladamente que devuelve el comando.
+## 7. Implementar una función que usando funciones vectoriales de R (apply, tapply, sapply,…) te devuelva un primer valor booleana para saber si hay valores NA en alguna columna del dataset. Si así lo fuera devolver sus índices y además sustituirlos por el valor 0.
+## 8. Calcular el número de filas del dataset.
+## 9. Calcula en cuántas fechas distintas se han realizado ventas.
+## 10. Calcula cuántos compradores distintos hay en el dataset.
+## 11. Calcula cuántos producto distintos se han vendido.
+## 12. Visualiza con distintos gráficos el dataset.
+
+* Los valores distintos de cada columna con varios tipos de gráficos.
+* Enfrenta unas variables contra otras para buscar patrones y comenta los patrones que puedas detectar.
+
+## 13. Usa split para construir a partir del dataset una lista con nombre lista.compra.usuarios en la que cada elemento de la lista es cada comprador junto con todos los productos que ha comprado (de forma similar a lo visto en clase en el recomendador).
+## 14. Hacer summary de lista.compra.usuarios.
+## 15. Contar cuántos usuarios hay en la lista lista.compra.usuarios.
+## 16. Detectar y eliminar duplicados en la lista.compra.usuarios (AYUDA: Usar lapply llamando a función unique).
+## 17. Contar cuántos usuarios hay en la lista después de eliminar duplicados.
+## 18. Convertir a tipo de datos transacciones. Guardar en Tlista.compra.usuarios.
+## 19. Hacer inspect de los dos primeros valores de Tlista.compra.usuarios.
+## 20. Buscar ayuda de itemFrequencyPlot para visualizar las 20 transacciones más frecuentes.
+## 21. Generar las reglas de asociación con 80% de confianza y 15% de soporte.
+## 22. Ver las reglas generadas y ordenalas por lift. Guarda el resultado en una variable nueva.
+## 23. Elimina todas las reglas redundantes de las dos formas vistas en clase. Calcula el % de reglas redundantes que había usando cada uno de los dos métodos.
+## 24. Dibuja las reglas ordenadas y no redundantes usando paquete arulesViz. Si son muchas visualiza las 20 primeras.
+## 25. MUY IMPORTANTE: Investigar algún otro paquete R relacionado con reglas de asociación (no visto en clase). Explicar su uso con un dataset y con ejemplos.
