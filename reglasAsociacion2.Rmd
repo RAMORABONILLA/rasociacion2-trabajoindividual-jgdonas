@@ -152,26 +152,73 @@ En este caso, ¿qué información nos ha dado?:
 * En cuanto a los productos, hay un total de 22343 productos comprados en el periodo que comprende el conjunto de datos, y como es de esperar, todos ellos son representados por cadenas de caracteres.
 
 
-> ## 7. Implementar una función que usando funciones vectoriales de R (apply, tapply, sapply,…) te devuelva un primer valor boolean para saber si hay valores NA en alguna columna del dataset. Si así lo fuera devolver sus índices y además sustituirlos por el valor 0.
-> ## 8. Calcular el número de filas del dataset.
+> ## 7. Implementar una función que usando funciones vectoriales de R (apply, tapply, sapply,…) te devuelva un primer valor booleano para saber si hay valores NA en alguna columna del dataset. Si así lo fuera devolver sus índices y además sustituirlos por el valor 0.
+
+> ## 8. Calcular el número de filas del *dataset*
+
+El número de filas del *dataset* ya lo conocemos gracias a las funciones que hemos ejecutado anteriormente (**str**, **summary**), pero por supuesto existen otras formas de descubrirlo como por ejemplo el método **dim**, que aunque no nos sirve para saber directamente el número de filas, si nos puedo ayudar gracias a lo que ya conocemos de la estrucutra de datos **online**: como es una estructura de tipo tabla, entonces sabemos que está formada por un número de filas y otro de columnas. Si usamos esta función, el resultado es:
+
+```{r}
+dim(online)
+```
+
+Es decir, nos dice de una forma implícita que está formada por 22343 filas y 3 columnas. Si queremos trabajar con el número de filas, y almacenar ese dato en una variable llamada por ejemplo **numero.filas**, tan solo tendríamos que tomar el primer elemento del vector que devuelve **dim**, de este modo:
+
+```{r}
+numero.filas <- dim(online)[1]
+numero.filas
+```
+
+Hay que tener cuidado, ya que podemos pensar que la función **length** podría servirnos para obtener el número de filas, pero esto no es así: como **online** es un conjunto de datos estructurado en listas, al ejecutarlo nos devolverá el número de listas que lo forma, que nosotros hemos interpretado previamente como columnas, esto es, nos devolverá que la longitud del conjunto de datos es 3:
+
+```{r}
+length(online)
+```
+
+De todas formas, si queremos usar **length** para saber el número de filas, no hay problemas: usemoslo para ver cuantos elementos contiene cualquiera de las tres listas que forman la estructura de datos:
+
+```{r}
+length(online$Fecha)
+length(online$IDcomprador)
+length(online$ProductoComprado)
+```
+Es decir, de esta manera está más que confirmado que el *dataset* está formado por 22343 filas.
+
 > ## 9. Calcula en cuántas fechas distintas se han realizado ventas.
+
 > ## 10. Calcula cuántos compradores distintos hay en el dataset.
+
 > ## 11. Calcula cuántos producto distintos se han vendido.
+
 > ## 12. Visualiza con distintos gráficos el dataset.
 
 * Los valores distintos de cada columna con varios tipos de gráficos.
 * Enfrenta unas variables contra otras para buscar patrones y comenta los patrones que puedas detectar.
 
 > ## 13. Usa split para construir a partir del dataset una lista con nombre lista.compra.usuarios en la que cada elemento de la lista es cada comprador junto con todos los productos que ha comprado (de forma similar a lo visto en clase en el recomendador).
+
 > ## 14. Hacer summary de lista.compra.usuarios.
+
 > ## 15. Contar cuántos usuarios hay en la lista lista.compra.usuarios.
+
 > ## 16. Detectar y eliminar duplicados en la lista.compra.usuarios (AYUDA: Usar lapply llamando a función unique).
+
 > ## 17. Contar cuántos usuarios hay en la lista después de eliminar duplicados.
+
 > ## 18. Convertir a tipo de datos transacciones. Guardar en Tlista.compra.usuarios.
+
 > ## 19. Hacer inspect de los dos primeros valores de Tlista.compra.usuarios.
+
 > ## 20. Buscar ayuda de itemFrequencyPlot para visualizar las 20 transacciones más frecuentes.
+
 > ## 21. Generar las reglas de asociación con 80% de confianza y 15% de soporte.
+
 > ## 22. Ver las reglas generadas y ordenalas por lift. Guarda el resultado en una variable nueva.
+
 > ## 23. Elimina todas las reglas redundantes de las dos formas vistas en clase. Calcula el % de reglas redundantes que había usando cada uno de los dos métodos.
+
 > ## 24. Dibuja las reglas ordenadas y no redundantes usando paquete arulesViz. Si son muchas visualiza las 20 primeras.
+
 > ## 25. MUY IMPORTANTE: Investigar algún otro paquete R relacionado con reglas de asociación (no visto en clase). Explicar su uso con un dataset y con ejemplos.
+
+> # Conclusiones
