@@ -5,6 +5,8 @@ date: "4/19/2018"
 output: html_document
 ---
 
+#* TODO: meter estilos css (centrar imagenes, cambiar color de fondo a los outputs, y fuente 'consolas', por ejemplo)
+
 Vamos a realizar, uno a uno, todos los pasos descritos en el propio fichero del enunciado.
 
 ## 1. Descargar a local el dataset online.csv (en repositorio de GitHub ClassRoom - directorio datasets).
@@ -21,21 +23,47 @@ Para hacer uso de un dataset, hay dos opciones:
 
 ```{r}
 library(readr)
-online <- read_csv("datasets/online.csv", 
-    col_names = FALSE)
-View(online)
+online <- read_csv("datasets/online.csv", col_names = FALSE)
 ```
 Nótese que hay que especificar que la primera fila no se corresponde con el nombre de las columnas, de lo contrario se perderá información de esa primera fila. Para ello, se deselecciona la opción "First row as names".
-
-```{r}
-
-```
-
 
 ## 2. Analizar la estructura, tipo,… del dataset.
 ## 3. Analizar significado, estructura, tipo,… de cada columna.
 ## 4. Comandos para ver las primeras filas y las últimas.
+
+Para ver las primera y últimas filas de una estructura de datos en R, es tan fácil como usar las funciones **head()** y **tail()**, que nos muestran respectivamente, las seis primeras y seis últimas filas de dicha estructura:
+
+```{r}
+head(online)
+tail(online)
+```
+
+
 ## 5. Cambiar los nombres de las columnas: Fecha, IDcomprador,ProductoComprado.
+
+Como el dataset original no contiene una fila donde se indique los nombres de columnas, vamos a cambiarlos por unos nombres que sean significativos y ayuden a entender mejor a cualquier persona que los use en adelante a entender qué datos tenemos entre mano.
+
+En primer lugar, nos cercioramos de que no tienen nombre de columnas, o simplemente, vemos qué nombres tienen actualmente, en el caso de que deseemos cambiarlos por otros más adecuados. Para ello usamos la función **colnames()**:
+ 
+```{r}
+colnames(online)
+```
+ 
+ Una forma de cambiarlos muy simple, es asignar a la propiedad **colnames** del dataset **online** los valores que deseamos de forma directa mediante la asignación tradicional en R, es decir, usando el operador **<-**. Así pues, como sabemos que el conjunto de nombres de columnas no es más que un vector de tres elementos, entonces, si ejecutamos:
+ 
+```{r}
+colnames(online) <- c("Fecha","IDcomprador","ProductoComprado")
+colnames(online)
+```
+ Podemos ver como efectivamente, estos valores han sido modificados en la estructura.
+ 
+ Aparte de haciendo una nueva llamada a la función colnames(), podemos cerciorarnos volviendo a ejecutar head(), ya que a parte de las 6 primeras filas, muestra el nombre de las columnas:
+ 
+```{r}
+head(online)
+```
+ 
+ 
 ## 6. Hacer un resumen (summary) del dataset y analizar toda la información detalladamente que devuelve el comando.
 ## 7. Implementar una función que usando funciones vectoriales de R (apply, tapply, sapply,…) te devuelva un primer valor booleana para saber si hay valores NA en alguna columna del dataset. Si así lo fuera devolver sus índices y además sustituirlos por el valor 0.
 ## 8. Calcular el número de filas del dataset.
