@@ -136,7 +136,23 @@ head(online)
  
  
 > ## 6. Hacer un resumen (summary) del dataset y analizar toda la información detalladamente que devuelve el comando.
-> ## 7. Implementar una función que usando funciones vectoriales de R (apply, tapply, sapply,…) te devuelva un primer valor booleana para saber si hay valores NA en alguna columna del dataset. Si así lo fuera devolver sus índices y además sustituirlos por el valor 0.
+
+La función ya antes mencionada **summary** nos devuelve un resumen con datos de gran utilidad a la hora de conocer cuales son las propiedades del conjunto de datos con el que vamos a trabajar. Como se ha dicho anteriormente de otras funciones, ésta puede ser usada con cualquier tipo de objeto de R, y dependiendo del caso devolverá una información u otra, pero siempre útil e interesante.
+
+En nuestro caso, como trabajamos con un **data frame**, nos devolverá información estadística de cada una de las columnas o mejor dicho, listas, que contiene la estructura:
+
+```{r}
+summary(online)
+```
+
+En este caso, ¿qué información nos ha dado?:
+
+* Las fechas de las compras almacenadas, están comprendidas entre el 1 de enero del año 2000 y el 26 de febrero del año 2002. Se indican también las fechas en las que se dan los cuartiles y la media, pero como suponemos que las compras se reparte de forma más o menos uniforme entre las fechas de inicio y final, esta información no es especialmente interesante (la mediana efectivamente es la fecha intermedia entre las de inicio y final, por ejemplo).
+* Hay un total de 1139 identificadores de comprador distintos, esto es, durante esos dos años y dos meses, el negocio vendió productos a 1139 personas distintas, las cuales pudieron, como es lógico hacer más de una compra en ese periodo. De nuevo, los datos de cuartiles no parecen especialmente relevantes, aunque igualmente son indicados por **summary**
+* En cuanto a los productos, hay un total de 22343 productos comprados en el periodo que comprende el conjunto de datos, y como es de esperar, todos ellos son representados por cadenas de caracteres.
+
+
+> ## 7. Implementar una función que usando funciones vectoriales de R (apply, tapply, sapply,…) te devuelva un primer valor boolean para saber si hay valores NA en alguna columna del dataset. Si así lo fuera devolver sus índices y además sustituirlos por el valor 0.
 > ## 8. Calcular el número de filas del dataset.
 > ## 9. Calcula en cuántas fechas distintas se han realizado ventas.
 > ## 10. Calcula cuántos compradores distintos hay en el dataset.
