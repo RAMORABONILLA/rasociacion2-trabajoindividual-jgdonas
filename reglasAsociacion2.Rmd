@@ -65,6 +65,41 @@ En est caso, observamos, como ya mencionamos antes, que **online** es un objeto 
 y **las cuales son muy recomendables usar cuando empezamos a trabajar con un conjunto de datos nuevos**, ya que nos van a dar muchas pistas de qué tenemos entre manos y nos ayudará a sacar mejor provecho y de forma más rápida toda la información que contiene.
 
 > ## 3. Analizar significado, estructura, tipo,… de cada columna.
+
+Ya hemos comprobado previamente, gracias a la función **str**, el tipo de cada columna. De todas formas, podemos comprobarlo una a una:
+
+```{r}
+class(online$X1)
+class(online$X2)
+class(online$X3)
+```
+**class()** nos indica que la primera columna tiene fechas, la segunda valores enteros y la tercera, cadena de caracteres.
+Lo mismo podemos hace con el "modo" y su estructura:
+
+```{r}
+mode(online$X1)
+mode(online$X2)
+mode(online$X3)
+```
+
+La función modo nos indica por su parte que la información almacenada por las tres columnas es de tipo numérico para las dos primeras, y de caracteres para la tercera, lo cual es lógico: la fecha no deja de ser una información que hace uso de las operaciones numéricas para su tratamiento, más allá de cómo se represente. Las otras dos columnas son de tipo básicos, de ahí que se almacenen directamente como números y caracteres, respectivamente.
+
+Finalmente, con respecto a sus estructuras:
+
+```{r}
+str(online$X1)
+str(online$X2)
+str(online$X3)
+```
+
+podemos decir a raíz de la información obtenida que:
+
+* las fechas se almacenan con formato **aaaa-mm-dd**
+* los números de la segunda columna, se almacenan simplemente con su valor numérico correspondiente
+* los valores de la tercera columna se almacenan mediante la cadena de caracteres correspondiente.  
+
+En resumen, está claro que en el dataset con el que vamos a trabajar, la información contenida es un conjunto de 22343 registros, donde en cada uno se muestra una fecha, una cantidad, y una etiqueta correspondiente a algo que aún no sabemos lo que es, pero que se aclarará en apartados siguientes y en cualquier caso, podemos inferir, ya que vemos que son nombres de productos de supermercado. En definitiva, podemos deducir que se trata de una base de datos de productos comprados por usuarios identificados por un número, en fechas concretas.
+
 > ## 4. Comandos para ver las primeras filas y las últimas.
 
 Para ver las primera y últimas filas de una estructura de datos en R, es tan fácil como usar las funciones **head()** y **tail()**, que nos muestran respectivamente, las seis primeras y seis últimas filas de dicha estructura:
