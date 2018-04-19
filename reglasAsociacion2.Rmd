@@ -186,9 +186,18 @@ Es decir, de esta manera está más que confirmado que el *dataset* está formad
 
 > ## 9. Calcula en cuántas fechas distintas se han realizado ventas.
 
+factor(online$Fecha) <- ya te dice por algún lado cuantos elementos distintos hay (603)
+
+
+length(levels(factor(online$Fecha)))
+
 > ## 10. Calcula cuántos compradores distintos hay en el dataset.
 
-> ## 11. Calcula cuántos producto distintos se han vendido.
+length(levels(factor(online$IDcomprador))) <- 1139, aunque ya lo sabíamos antes gracias a summary...
+
+> ## 11. Calcula cuántos productos distintos se han vendido.
+
+length(levels(factor(online$ProductoComprado))) <- 38
 
 > ## 12. Visualiza con distintos gráficos el dataset.
 
