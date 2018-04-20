@@ -154,6 +154,48 @@ En este caso, ¿qué información nos ha dado?:
 
 > ## 7. Implementar una función que usando funciones vectoriales de R (apply, tapply, sapply,…) te devuelva un primer valor booleano para saber si hay valores NA en alguna columna del dataset. Si así lo fuera devolver sus índices y además sustituirlos por el valor 0.
 
+En primer lugar, y para saber si la función que hagamos en este paso realmente funciona, vamos a ver si existen valores **NA** e nuestro conjunto de datos **online**
+
+```{r}
+length(which(is.na(online$Fecha)))
+length(which(is.na(online$IDcomprador)))
+length(which(is.na(online$ProductoComprado)))
+```
+
+Es decir, sabemos desde este momento que no hay ningún valor **NA** en el *dataset*. Otra forma de comprobarlo
+
+```{r}
+which(is.na.data.frame(EuStockMarkets))
+```
+
+Y una tercera forma:
+
+```{r}
+anyNA(online)
+```
+
+Es decir, sabemos de antemano que la función que vamos a generar va a devolver una lista con el valor **FALSE**, indicando que no hay valores **NA**, el *dataframe* **online** tal cual, ya que no contiene valores **NA**, y por último, un vector vacío, ya que no hay posiciones donde encontrar ningún valor **NA**.
+
+En cualquier vamos a crear la función solicitada y probarla con algún dataset que sepamos que tiene valores NA, para demostrar que efectivamente funciona. El código de nuestra función es:
+
+```{r}
+na.in.dataframe <-function(dataframe){
+
+  anyNaValues <- anyNA(dataframe)
+  
+  if(!anyNaValues){
+    dataframeWithoutNas <- dataframe
+    nasPositions <- vector()
+  }
+  
+  
+  return(list(any.nas = anyNaValues, 
+              dataframe.without.nas = dataframeWithoutNas, 
+              nas.positions = nasPositions))  
+}
+```
+
+
 > ## 8. Calcular el número de filas del *dataset*
 
 El número de filas del *dataset* ya lo conocemos gracias a las funciones que hemos ejecutado anteriormente (**str**, **summary**), pero por supuesto existen otras formas de descubrirlo como por ejemplo el método **dim**, que aunque no nos sirve para saber directamente el número de filas, si nos puedo ayudar gracias a lo que ya conocemos de la estrucutra de datos **online**: como es una estructura de tipo tabla, entonces sabemos que está formada por un número de filas y otro de columnas. Si usamos esta función, el resultado es:
@@ -186,18 +228,52 @@ Es decir, de esta manera está más que confirmado que el *dataset* está formad
 
 > ## 9. Calcula en cuántas fechas distintas se han realizado ventas.
 
-factor(online$Fecha) <- ya te dice por algún lado cuantos elementos distintos hay (603)
+Para el ejercicio 9, 10 y 11, vamos a proceder de la misma manera. La función que nos va a permitir ver cuántos elementos distintos hay dentro de una colección de datos, (en este caso, en una columna dada) es **factor**. Si ejecutamos (uso **head** para que no se muestren todos los elementos, los cuales ocuparían mucho espacio en el documento y se hace molesto de visualizar): 
 
+```{r}
+head(factor(online$Fecha))
+```
+ obtenemos una lista de todas las fechas existentes en esa columna del *dataset*, pero ya no son tratadas como fechas, sino como **factores**. En la línea final podemos ver que hay 603 niveles, es decir, 603 elementos distintos entre si, o lo que es lo mismo, 603 fechas distintas. Si queremos ver cuáles son esas fechas distintas, tenemos varias formas (uso **head** de nuevo por el mismo motivo):
+ 
+```{r}
+head(levels(factor(online$Fecha)))
+```
+ 
+que como podemos ver, contiene un total de 603 elementos. Si queremos obtener es número, no tenemos que "contarlos", es tan fácil como usar la función **length**
 
-length(levels(factor(online$Fecha)))
+```{r}
+numero.de.fechas.distintas <- length(levels(factor(online$Fecha)))
+numero.de.fechas.distintas
+```
+
+De cualquier de estas formas, hemos comprobado que hay 603 fechas distintas. Quizás, cuando programemos, la más interesante es la última, ya qu es la que nos permite almacenar en una variable el número buscado, y usarlo para siguientes operaciones.
+
+En los siguientes dos ejercicios, conocidas yas las formas de obtener el número distinto de elementos para cada columna, simplemente ejecutaremos código e indicaremos el número deseado.
+
 
 > ## 10. Calcula cuántos compradores distintos hay en el dataset.
 
-length(levels(factor(online$IDcomprador))) <- 1139, aunque ya lo sabíamos antes gracias a summary...
+Repetimos las instrucciones antes explicadas:
+
+```{r}
+numero.de.compradores.distintos <- length(levels(factor(online$IDcomprador)))
+numero.de.compradores.distintos
+```
+
+El número de compradores distintos es 1139, aunque gracias a la función **summary** este dato ya lo conocíamos.
+
 
 > ## 11. Calcula cuántos productos distintos se han vendido.
 
-length(levels(factor(online$ProductoComprado))) <- 38
+Repetimos las instrucciones antes explicadas:
+
+```{r}
+numero.de.productos.distintos <- length(levels(factor(online$ProductoComprado)))
+numero.de.productos.distintos
+```
+
+El número de productos distintos es 38.
+
 
 > ## 12. Visualiza con distintos gráficos el dataset.
 
