@@ -11,6 +11,5 @@ Segundo ejercicio individual de la asignatura LCC
 
 NOTA: 
 
-- Organizar los máximo posible el repositorio, crear subdirectorios, etc. 
-
-- Hacer "commits" comentando adecuadamente lo que habéis realizado en la nueva versión. 
+- Organizar lo máximo posible el repositorio, crear subdirectorios, etc. 
+- Hacer "__commits__" comentando adecuadamente lo que habéis realizado en la nueva versión. 
