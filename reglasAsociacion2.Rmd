@@ -186,8 +186,12 @@ na.in.dataframe <-function(dataframe){
   if(!anyNaValues){
     dataframeWithoutNas <- dataframe
     nasPositions <- vector()
+  }else{
+    m <- as.matrix(dataframe)
+    nasPositions <- which(is.na(m))
+    m[is.na(m)] <- 0
+    dataframeWithoutNas <- as.data.frame(m)
   }
-  
   
   return(list(any.nas = anyNaValues, 
               dataframe.without.nas = dataframeWithoutNas, 
@@ -195,6 +199,19 @@ na.in.dataframe <-function(dataframe){
 }
 ```
 
+Para comprobar su correcto funcionamiento, vamos a insertar valores NA en la colección:
+
+```{r}
+online$Fecha[50] <- NA
+online$IDcomprador[60] <- NA
+online$ProductoComprado[70] <- NA
+df <- na.in.dataframe(online)
+df$any.nas
+df$nas.positions
+df$dataframe.without.nas[1:70,]
+```
+
+Para los índices, se da una lista de ellos dando por hecho que se usa una estructura de tipo vector, es decir, para cada valor **NA** encontrado, se da su índice considerando que todos los datos de todas las columnas se concatenan. ASí pues, si tenemos un *dataframe* formado por 3 columnas de 1000 valores cada una, y la función nos indica que hay un valor **NA** en la posición 1500, esto significa que el valor 500 de la segunda fila es **NA**. Se podría haber devuelto una lista para cada columna, pero como el enunciado no especifica, se ha resuelto de esta forma.
 
 > ## 8. Calcular el número de filas del *dataset*
 
