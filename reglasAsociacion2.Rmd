@@ -336,7 +336,7 @@ length(lista.compra.usuarios)
 
 Lo cual, repito, coincide con el dato ya calculado antes: hay 1139 usuarios.
 
-> ## 16. Detectar y eliminar duplicados en la lista.compra.usuarios (AYUDA: Usar lapply llamando a función unique).
+> ## 16. Detectar y eliminar duplicados en la lista.compra.usuarios (AYUDA: Usar lapply llamando a función unique).{#ej16}
 
 Para detectar y eliminar duplicados, tendríamos quer recorrer cada uno de los elementos de la lista, y aplicarle la función **unique**, que se encarga de devolver un vector con elementos sin repetir. Para conseguir esto, haciendo uso de la potencia de R, tan solo tendríamos que hacer uso de la función **lapply**, la cual se encarga de aplicar la función que le indiquemos, que será **unique**, a cada uno de los elementos de la lista. En primer lugar, para demostrar el funcionamiento, vamos a ver que efectivamente, hay elementos de la lista con productos repetidos, como por ejemplo:
 
@@ -366,15 +366,131 @@ Pero como se puede ver, no varía este número, por lo tanto el número de usuar
 
 > ## 18. Convertir a tipo de datos transacciones. Guardar en Tlista.compra.usuarios.
 
+Para convertir a tipo de datos **transacciones**, podemos hacer uso de la función **as**, que sirve para hacer conversiones de tipos. Es tan simple como ejecutar lo siguiente no sin antes haber cargado la librería **arules**, ya que ese tipo pertenece a ella y de otra manera el sistema no sabrá a qué tipo se pretende hacer el cambio: 
+
+```{r}
+library(arules)
+Tlista.compra.usuarios <- as(lista.compra.usuarios,"transactions")
+```
+
+Con esto, podemos manipular la información de manera más eficiente, ya que el tipo de datos *transactions* solo almacena, en forma de matriz, los pares para los cuales se cumple un cierto dato. En este caso concreto, para cada usuario, solo tendremos un par que le haga corresponder con el producto comprado. Así pues, al final lo que tenemos en **Tlista.compra.usuarios** será una matriz difusa, con todas la ventajas que ello conlleva, sobre todo a la hora de realizar un sistema de recomendación como el que haremos en los siguientes pasos.
+
 > ## 19. Hacer inspect de los dos primeros valores de Tlista.compra.usuarios.
+
+Para hacer uso de esta función, antes debemos tener cargada la librería a la que pertenece: **arules** (nosotros lo hicimos en el apartado anterior). Tras ello, podemos ver qué contiene la estructura creada en el apartado anterior. Para elegir los dos primeros valores, podemos usar la sintaxis "corchete": [1:2]
+
+```{r}
+inspect(Tlista.compra.usuarios[1:2])
+```
+
+Como se puede comprobar, cada transacción almacena los productos comprados por cada usuario, además sin repeticiones gracias al paso realizado en el [apartado número 16](#ej16).
 
 > ## 20. Buscar ayuda de itemFrequencyPlot para visualizar las 20 transacciones más frecuentes.
 
+La función **itemFrequencyPlot** nos permite visualizar de forma gráfica, concretamente mediante un diagrama de barras, las frecuencias de cada uno de los *items*, en este caso concreto, productos de supermercado, basado en los datos que tenemos en nuestro objeto de tipo *transactions*. Si consultamos la ayuda de esta función, vemos que existe un parámetro llamado **topN** que hace que se muestren en la gráfica los **n** (con **n** siendo un número entero) elementos con mayor frecuencia o *lift*, si se indica otro parámetro. De esta forma, obtrendremos esos **n** primeros (en este caso, 20 primeros) productos por orden de frecuencia, de **manera descendente según su soporte**. Lo único que tenemos que ejecutar es:
+
+
+```{r}
+itemFrequencyPlot(Tlista.compra.usuarios, topN=20)
+```
+
+Como se puede comprobar, las verduras son el producto más comprado con cierta diferencia, seguidas de aves de corral (*poultry*) y ya, con frecuencias muy parecidas (casi las mismas) propductos como helados, cereales, o carne.
+
+
 > ## 21. Generar las reglas de asociación con 80% de confianza y 15% de soporte.
+
+Las reglas de asociación se pueden obtener de forma muy fácil gracias, de nuevo, a la librería **arules**. Tiene varias funciones para conseguir esto, dependiendo del algoritmo que deseemos aplicar: (apriori, eclat). En este caso, vamos a usar **apriori**, la cual acepta parámetros que permiten indicar cual es la confianza y soporte mínimo, concretamente debemos indicarlo dentro del parametro *__parameter__*, que es una lista en la cual indicar parámetros relativos al propio algoritmo que busca las reglas. En este caso concreto, con ejecutar la siguiente instrucción, sería suficiente:
+
+```{r}
+reglas <- apriori(Tlista.compra.usuarios,parameter=list(supp=0.15, conf=0.8))
+```
+
+Que nos da como resultado un total de 22 reglas:
+
+```{r}
+inspect(rules)
+```
 
 > ## 22. Ver las reglas generadas y ordenalas por lift. Guarda el resultado en una variable nueva.
 
+Las reglas, ya visualizadas en el apartado anterior, pueden ser ordenadas mediante la función **sort**, que permite indicar mediante qué variable ordenar. En este caso, será por *lift*, con lo que tan solo tenemos que ejecutar lo siguiente para almacenarlo en una variable nueva que llamaremos reglasOrdenadasPorLift:
+
+```{r}
+reglasOrdenadasPorLift <- sort(reglas,by="lift")
+inspect(reglasOrdenadasPorLift)
+```
+
 > ## 23. Elimina todas las reglas redundantes de las dos formas vistas en clase. Calcula el % de reglas redundantes que había usando cada uno de los dos métodos.
+
+Se dice que dos reglas son redundantes si teniendo igual **confianza**, solo difieren en un atributo. La regla con ese atributo extra se considera que no aporta nada, es decir, es redundante y podría ser descartada del conjunto de reglas.
+
+Para eliminar reglas redundantes, efectivamente hay dos métodos:
+
+* mediante la función **is.subset**
+* mediante la función **is.redundant**
+
+aunque no se considera que el método que usa la función **is.subset** funcione correctamente, vamos a mostrar como se hace de las dos maneras.
+
+###Método **is.subset**
+
+Lo que haremos, es encontrar qué reglas son subconjunto de otras y almacenarlo en otra variable:
+
+```{r}
+subconjuntos <- is.subset(reglas,reglas)
+subconjuntos
+```
+
+La visualizacion de la propia variable **redundantes**, donde hemos almacenado la información de los subconjuntos encontrados, ya es bastante buena. Hay que tener en cuenta que el resultado no es más que una matriz (dispersa) donde cada conjunto de objetos (*itemsets*) se relaciona con todos los demás *itemsets*, y solo aquellos que son subconjuntos del otro, tendrá el símbolo **|** en su intersección en la matriz. Como es lógico, cada *itemset* estará relacionado consigo mismo, lo que se traduce en que la diagonal tendrá el símbolo **|**. Y por supuesto, si hay subconjuntos, aparecerá más veces, siendo estas otras veces las realmente relevantes. De hecho, podemos comprobar como podemos obviar la parte triangular inferior de la matriz, ya que no contiene ninguna información relevante. Así pues, quedémosnos con esa parte:
+
+```{r}
+matrizRedundantes <- as.matrix(subconjuntos)
+matrizRedundantes[lower.tri(matrizRedundantes,diag = T)] <- NA
+redundantes <- colSums(matrizRedundantes,na.rm = T) >= 1
+which(redundantes)
+```
+
+Es decir, hemos:
+
+1. convertido la matriz dispersa en matriz normal
+2. hemos hecho que toda la parte triangular inferior, incluida la diagonal, tome valores NA
+3. obtenido las reglas que tienen **al menos alguna otra regla** redundante
+4. finalmente, mostramos cuales son esas reglas redundantes
+
+Por lo tanto, ahora solo quedaría eliminar esas reglas redundantes, que son un total de 22, de la lista de reglas original:
+
+```{r}
+length(redundantes)
+```
+
+```{r}
+reglas.noRedundantes <- reglas[!redundantes]
+inspect(reglas.noRedundantes)
+```
+
+Quedándonos finalmente, un total de 11 reglas no redundantes.
+
+###Método **is.redundant**
+
+Esta función, del paquete **arules**, nos permite encontrar reglas redundantes indicando simplemente cual es el conjunto de reglas, y adicionalmente, bajo qué parámetro queremos encontrar las reglas redundanes. Tan solo tenemos que ejecutar lo siguiente para obtener un **vector booleano que nos indica qué regla es redundante**:
+
+```{r}
+redundantes2 <- is.redundant(reglas)
+length(which(redundantes2))
+```
+
+Que como podemos ver, nos dice que no hay ninguna regla redundante. Si indicamos alguna medida concreta para realizar la comprobación:
+
+```{r}
+redundantes2 <- is.redundant(reglas,measure="confidence")
+length(which(redundantes2))
+```
+
+```{r}
+redundantes2 <- is.redundant(reglas,measure="improvement")
+length(which(redundantes2))
+inspect(reglas[redundantes2])
+```
+En este caso, según el parámetro **improvement** hay 11 reglas redundantes. En cualquier caso, podemos ver que los dos métodos devuelven resultados distintos, por lo que habría que tener mucho cuidado a la hora de usar uno u otro y analizar realmente por qué ocurre esto.
 
 > ## 24. Dibuja las reglas ordenadas y no redundantes usando paquete arulesViz. Si son muchas visualiza las 20 primeras.
 
