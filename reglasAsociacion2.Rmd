@@ -213,6 +213,15 @@ df$dataframe.without.nas[1:70,]
 
 Para los índices, se da una lista de ellos dando por hecho que se usa una estructura de tipo vector, es decir, para cada valor **NA** encontrado, se da su índice considerando que todos los datos de todas las columnas se concatenan. ASí pues, si tenemos un *dataframe* formado por 3 columnas de 1000 valores cada una, y la función nos indica que hay un valor **NA** en la posición 1500, esto significa que el valor 500 de la segunda fila es **NA**. Se podría haber devuelto una lista para cada columna, pero como el enunciado no especifica, se ha resuelto de esta forma.
 
+Antes de continuar, recargamos los datos para desaparezcan los valores **NA** introducidos antes:
+
+```{r}
+library(readr)
+online <- read_csv("datasets/online.csv", col_names = FALSE)
+colnames(online) <- c("Fecha","IDcomprador","ProductoComprado")
+```
+
+
 > ## 8. Calcular el número de filas del *dataset*
 
 El número de filas del *dataset* ya lo conocemos gracias a las funciones que hemos ejecutado anteriormente (**str**, **summary**), pero por supuesto existen otras formas de descubrirlo como por ejemplo el método **dim**, que aunque no nos sirve para saber directamente el número de filas, si nos puedo ayudar gracias a lo que ya conocemos de la estrucutra de datos **online**: como es una estructura de tipo tabla, entonces sabemos que está formada por un número de filas y otro de columnas. Si usamos esta función, el resultado es:
@@ -299,7 +308,23 @@ El número de productos distintos es 38.
 
 > ## 13. Usa split para construir a partir del dataset una lista con nombre lista.compra.usuarios en la que cada elemento de la lista es cada comprador junto con todos los productos que ha comprado (de forma similar a lo visto en clase en el recomendador).
 
+Para obtener la lista pedida, tan solo hay que usar el método split con los parámetros deseados, esto es, le indicámos qué datos queremos listar y en base a qué otro parámetro, en este caso queremos listar los productos según el cliente, que a su vez está identificado por el identificador **IDcomprador**:
+
+```{r}
+lista.compra.usuarios <- split(x=online$ProductoComprado,f=online$IDcomprador)
+head(lista.compra.usuarios)
+```
+
+
 > ## 14. Hacer summary de lista.compra.usuarios.
+
+Si usamos la función **summary** con la estructura obtenida en el paso anterior, obtendríamos un pequeño "informe" por cada uno de los elementos de esa lista. Por ello, vamos a aplicarlo solo a los primeros seis elementos:
+
+```{r}
+summary(head(lista.compra.usuarios))
+```
+
+Como podemos comprobar, por cada uno de los elementos de la lista obtenida, o dicho de otra forma, por cada uno de los usuarios que han sido registrados en el *dataset* original, se muestra en número de productos que ha comprado (no necesariamente el número de productos distintos), así como la clase (class) y modo (mode) de almacenamiento. En este caso, como los productos se almacenan con su nombre, tenemos que los elementos dentro de cada lista no tienen clase y son almacenados en modo *character*.
 
 > ## 15. Contar cuántos usuarios hay en la lista lista.compra.usuarios.
 
