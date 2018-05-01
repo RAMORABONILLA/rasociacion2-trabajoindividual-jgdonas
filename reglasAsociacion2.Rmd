@@ -328,9 +328,41 @@ Como podemos comprobar, por cada uno de los elementos de la lista obtenida, o di
 
 > ## 15. Contar cuántos usuarios hay en la lista lista.compra.usuarios.
 
+Este dato ya lo habíamos calculado en apartados anteriores. No vamos a detenernos mucho en esto por lo tanto, simplemente sabiendo, como ya se ha dicho en el apartado anterior, que la lista que tenemos hace corresponder a cada usuario el conjunto de productos que compra, entonces la función **length** nos va a devolver el número de usuarios que hay en la lista:
+
+```{r}
+length(lista.compra.usuarios)
+```
+
+Lo cual, repito, coincide con el dato ya calculado antes: hay 1139 usuarios.
+
 > ## 16. Detectar y eliminar duplicados en la lista.compra.usuarios (AYUDA: Usar lapply llamando a función unique).
 
+Para detectar y eliminar duplicados, tendríamos quer recorrer cada uno de los elementos de la lista, y aplicarle la función **unique**, que se encarga de devolver un vector con elementos sin repetir. Para conseguir esto, haciendo uso de la potencia de R, tan solo tendríamos que hacer uso de la función **lapply**, la cual se encarga de aplicar la función que le indiquemos, que será **unique**, a cada uno de los elementos de la lista. En primer lugar, para demostrar el funcionamiento, vamos a ver que efectivamente, hay elementos de la lista con productos repetidos, como por ejemplo:
+
+```{r}
+lista.compra.usuarios[5]
+```
+
+Tiene elementos como "vegetables" repetidos varias veces. Si aplicamos la función, y volvemos a consultar la lista del usuario número 5:
+
+```{r}
+lista.compra.usuarios <- lapply(lista.compra.usuarios,unique)
+lista.compra.usuarios[5]
+```
+
+Podemos comprobar que los elementos repetidos han desaparecido ("vegetables" aparece ya tan solo una vez). Por supuesto, esot se ha hecho internamento con todos los usuarios de la lista, es decir, ningún usuario tendrá ahora productos repetidos en su lista.
+
 > ## 17. Contar cuántos usuarios hay en la lista después de eliminar duplicados.
+
+La operación realizada anteriormente en ningún caso va a modificar el número de usuarios de la lista. En todo caso, si por casualidad dos usuarios distintos hubieran comprado los mismos productos, al ejecutar:
+
+```{r}
+u <- unique(lista.compra.usuarios[1:1139])
+length(u)
+```
+
+Pero como se puede ver, no varía este número, por lo tanto el número de usuarios que hay en la lista después ede eliminar duplicados no cambia.
 
 > ## 18. Convertir a tipo de datos transacciones. Guardar en Tlista.compra.usuarios.
 
