@@ -408,7 +408,7 @@ reglas <- apriori(Tlista.compra.usuarios,parameter=list(supp=0.15, conf=0.8))
 Que nos da como resultado un total de 22 reglas:
 
 ```{r}
-inspect(rules)
+inspect(reglas)
 ```
 
 > ## 22. Ver las reglas generadas y ordenalas por lift. Guarda el resultado en una variable nueva.
@@ -493,6 +493,70 @@ inspect(reglas[redundantes2])
 En este caso, según el parámetro **improvement** hay 11 reglas redundantes. En cualquier caso, podemos ver que los dos métodos devuelven resultados distintos, por lo que habría que tener mucho cuidado a la hora de usar uno u otro y analizar realmente por qué ocurre esto.
 
 > ## 24. Dibuja las reglas ordenadas y no redundantes usando paquete arulesViz. Si son muchas visualiza las 20 primeras.
+
+En primer lugar, deberemos tener cargado el paquete en cuestión:
+
+```{r}
+library(arulesViz)
+```
+
+Si visitamos la página de agyuda de este paquete, veremos que hay una serie de funciones que permiten visualizar reglas de asociación y *frequent itemsets*, que son los conjuntos de elementos frecuentes en los que se basan la generación de reglas de asociación. Estas funciones que tenemos a nuestra disposición son:
+
+* **inspectDT**: genera una tabla HTML que permite visualizar y filtrar reglas de forma interactiva
+* **plot**: sobrecarga de este ya conocido método para visualizar reglas de asociación, aceptando los parámetros ya usados para otro tipo de estructura de datos
+* **plotly_arules**: genera un *scatter plot* de reglas de asociación usando la función **plotly**
+* saveAsGraph: almacena un conjunto de reglas como un grafo, en distintos formatos como GraphML, dimacs, o dot.
+
+Vamos a ver distintos ejemplos simples, recomiendo visitar la página de ayuda para poder generar visualizaciones más complejas y a medida de lo que se necesite en cada momento.
+
+###inspectDT
+
+Veamos en este paso, las reglas no redundantes calculadas previamente con el método **is.subset**, ordenadas por confianza:
+
+```{r}
+inspectDT(sort(reglas.noRedundantes,by="conf"))
+```
+
+Como se puede ver, se genera una tabla muy interesante, al estilo de las que podemos ver en páginas web, que permiten reordenar columnas, hacer búsquedas por cada una de ellas, y paginar los elementos para que la tabla no sea excesivamente grande o bien para mostrar todos los elementos de una vez. Además, si se hace uso de ella en un documento **rmarkdown**, del cual se va a generar un HTML, es muy interesante ya que en el documento resultante vamos a poder interactuar con la tabla, manteniendo ésta toda su funcionalidad.
+
+###plot
+
+Esta función nos permite ver ciertas propeidades de las reglas de asociación. Por ejemplo, con los parámetros por defecto, nos permite ver para el conjunto de reglas, el soporte de cada una de ellas frente a su confianza. Este tipo de gráfica la hemos visto ya con otras estructuras, y sabemos que para un tercer parámetro, se usa una escala de colores, que se indica a la derecha (en este caso, para el *lift*). Si indicamos que queremos interactividad, podemos inspeccionar, filtrar y hacer *zoom*, aunque esta opción no parece funcionar en los documentos **rmarkdown**. Probemóslo con las reglas redundanetes que en este caso no tiene sentido ordenarlas ya que se nos va a motrar un gráfico donde el orden en que le pasemos las reglas no interfiere en el resultado:
+
+```{r}
+plot(reglas[redundantes])
+```
+
+Si quisieramos la interactividad antes mencionada:
+
+```{r eval=FALSE}
+plot(reglas, engine = "interactive")
+```
+
+
+###plotly_arules
+
+Esta función nos permite generar gráficas de tipo *scatterplot*, *two-key plot* y *matrix*, y permite una alta personalización del gráfico resultante, indicando tamaño de marcadores, colores, etc:
+
+Además, permite guardar la gráfica obtenida como página html mediante:
+
+```{r  eval=FALSE}
+p <- plotly_arules(rules)
+htmlwidgets::saveWidget(p, "arules.html", selfcontained = FALSE)
+browseURL("arules.html")
+```
+
+En mi caso, la función no parece funcionar pese a cargar la librería **plotly**, que parece ser necesaria.
+
+
+###saveAsGraph
+
+Aunque no es un método de visualización como los anteriores, lo comento ya que pertenece a **arulesViz**: ésta función permite almacenar un conjunto de reglas en un documento **XML** en su comportamiento por defecto, que puede ser útil a la hora de portar los datos y ser usados por parte de otras aplicaciones. También puede ser almacenado en otros formatos: "edgelist", "dimacs", "gml", "dot" 
+
+```{r}
+saveAsGraph(reglas, "reglas.graphml")
+```
+
 
 > ## 25. MUY IMPORTANTE: Investigar algún otro paquete R relacionado con reglas de asociación (no visto en clase). Explicar su uso con un dataset y con ejemplos.
 
