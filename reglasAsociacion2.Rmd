@@ -5,7 +5,7 @@ date: "4/19/2018"
 output: html_document
 ---
 
-#* TODO: meter estilos css (centrar imagenes, cambiar color de fondo a los outputs, y fuente 'consolas', por ejemplo)
+#* TODO: meter estilos css (centrar imagenes, cambiar color de fondo a los outputs, y fuente 'consolas', por ejemplo). También se puede poner un fondo
 
 Vamos a realizar, uno a uno, todos los pasos descritos en el propio fichero del enunciado.
 
@@ -303,8 +303,31 @@ El número de productos distintos es 38.
 
 > ## 12. Visualiza con distintos gráficos el dataset.
 
-* Los valores distintos de cada columna con varios tipos de gráficos.
-* Enfrenta unas variables contra otras para buscar patrones y comenta los patrones que puedas detectar.
+La visualización gráfica de *datasets* es una muy buena herramienta para conocer, de forma rápida e intuitiva, cómo se relacionan las distintas variables o cómo se distibuyen los datos. En **R** tenemos un gran número de librerías a nuestra disposición para obtener gráficas, así como funciones disponibles en el paquete básico (como **plot**, por ejemplo). 
+
+En nuestro caso, nuestro *dataset* es muy básico, y a priori las variables no dan mucho juego, ya que simplemente tenemos un listado de productos comprados, donde se especifica fecha y usuario. Así pues, en este caso sólo podríamos visualizar, por ejemplo:
+
+* productos por fecha (por meses, o día), para detectar qué se compra en ciertas épocas del año
+* frecuencia de productos, esto es, obtendríamos información de qué productos son más comprados.
+
+En cualquier caso, **enfrentar unas variables contra otras para buscar patrones no tiene mucho sentido con estos datos**.
+
+En cualquier caso, es posible que antes de poder mostrar gráficas con información de este conjunto de datos, tengamos que realizar algún preprocesado, como por ejemplo agrupación de datos por fecha o por cliente.
+
+En cualquier caso, podemos visualizar datos de las columnas, como por ejemplo:
+
+Histograma de compras por fecha, que nos da una pista de en qué épocas hay más ventas:
+
+```{r}
+hist(online$Fecha,freq=T,breaks=15,xlab = "Fecha", ylab = "Numero de compras", axes = TRUE, plot = TRUE, labels = FALSE,col = "lightblue",main = "Compras por fecha")
+```
+
+en este caso podemos ver cómo, curiosamente a finales de año no hay ventas (puede ser debido a un cierre temporal) y que al menos anualmente no existe una tendencia: en 2000 las ventas son crecientes, y en 2001 son decrecientes. Necesitaríamos datos de más años para poder obtener conclusiones.
+
+Otro ejemplo, sería el de ventas por producto. Para ello, podemos seguir el procedimiento realizado en el [apartado número 20](#ej20), que necesita del uso de otras estructuras de datos que se ven más adelante.
+
+
+
 
 > ## 13. Usa split para construir a partir del dataset una lista con nombre lista.compra.usuarios en la que cada elemento de la lista es cada comprador junto con todos los productos que ha comprado (de forma similar a lo visto en clase en el recomendador).
 
@@ -385,7 +408,7 @@ inspect(Tlista.compra.usuarios[1:2])
 
 Como se puede comprobar, cada transacción almacena los productos comprados por cada usuario, además sin repeticiones gracias al paso realizado en el [apartado número 16](#ej16).
 
-> ## 20. Buscar ayuda de itemFrequencyPlot para visualizar las 20 transacciones más frecuentes.
+> ## 20. Buscar ayuda de itemFrequencyPlot para visualizar las 20 transacciones más frecuentes.{#ej20}
 
 La función **itemFrequencyPlot** nos permite visualizar de forma gráfica, concretamente mediante un diagrama de barras, las frecuencias de cada uno de los *items*, en este caso concreto, productos de supermercado, basado en los datos que tenemos en nuestro objeto de tipo *transactions*. Si consultamos la ayuda de esta función, vemos que existe un parámetro llamado **topN** que hace que se muestren en la gráfica los **n** (con **n** siendo un número entero) elementos con mayor frecuencia o *lift*, si se indica otro parámetro. De esta forma, obtrendremos esos **n** primeros (en este caso, 20 primeros) productos por orden de frecuencia, de **manera descendente según su soporte**. Lo único que tenemos que ejecutar es:
 
@@ -557,7 +580,7 @@ Aunque no es un método de visualización como los anteriores, lo comento ya que
 saveAsGraph(reglas, "reglas.graphml")
 ```
 
-
 > ## 25. MUY IMPORTANTE: Investigar algún otro paquete R relacionado con reglas de asociación (no visto en clase). Explicar su uso con un dataset y con ejemplos.
+p
 
 > # Conclusiones
