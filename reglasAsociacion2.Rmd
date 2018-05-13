@@ -5,8 +5,6 @@ date: "4/19/2018"
 output: html_document
 ---
 
-#* TODO: meter estilos css (centrar imagenes, cambiar color de fondo a los outputs, y fuente 'consolas', por ejemplo). También se puede poner un fondo
-
 Vamos a realizar, uno a uno, todos los pasos descritos en el propio fichero del enunciado.
 
 > ## 1. Descargar a local el dataset online.csv (en repositorio de GitHub ClassRoom - directorio datasets).
@@ -581,6 +579,251 @@ saveAsGraph(reglas, "reglas.graphml")
 ```
 
 > ## 25. MUY IMPORTANTE: Investigar algún otro paquete R relacionado con reglas de asociación (no visto en clase). Explicar su uso con un dataset y con ejemplos.
-p
 
-> # Conclusiones
+Uno de los paquetes relacionados con las reglas de asociación que aparecen con más frecuencia cuando se hace una búsqueda por internet es arulesCBA, que es un paquete que permite construir clasificadores, usando algoritmos de asociación, que nos permitan clasificar datos.
+
+Para este ejemplo, necesitaremos por supuesto tener instalada y cargada la librería **arulesCBA** y además, para poder mostrar ejemplos, usaremos el *dataset* **iris** (veremos los ejemplos de la documentación, ya que pruebas con otros datos me han dado errores).
+
+```{r}
+library(arulesCBA)
+data("iris")
+attach(iris)
+pairs(iris)
+```
+
+Como se puede ver, puede ser interesante analizar **Petal.Length** con **Petal.Width** (población) ya que parecen tener una relación clara.
+
+Una de las funciones disponibles es bCBA, que permite obtener clasificadores de, en este caso, flores según los datos disponibles, y haciendo uso de reglas de asociación de manera interna. Así pues, con:
+
+```{r}
+classifier <- bCBA(Species ~ ., data = iris, supp = 0.05, conf = 0.9, lhs.support = TRUE)
+predict(classifier,iris)
+```
+
+hemos obtenido una predicción en la que, a partir de los datos obtenidos, la especia a la que se corresponden dichos datos. Para poder comparar, los datos orignales son:
+
+```{r}
+iris$Species
+```
+
+
+es decir, en la predicción de los 6 primeros elementos, ha fallado en 3 casos (los casos setosa que aparecen donde no deberían, a ojo)
+Para ello, el clasificador obtenido en este caso hace uso de un total de 50 reglas:
+
+```{r}
+classifier
+```
+
+De un modo muy parecido trabaja la función **CBA**, que tiene incluso los mismos parámetros, pero internamente trabaja de forma diferente.
+
+Por último, otra función muy intersante es **discretizeDF.supervised** que permite convertir variables continuas en discretas, esto es, en factores, que son adecuados para el minado mediante las reglas de asociación. 
+
+```{r}
+summary(iris)
+iris.disc <- discretizeDF.supervised(Species ~ ., iris)
+summary(iris.disc)
+```
+
+Claramento se ve la diferencia, donde anteriormente los datos son tratados como los de una variable continua y tras discretizar, se tratan como variables discretizadas haciendo uso de la formula pasada como primer parámetro, en este caso **Species ~ .**, que relaciona la especie con todas las demas variables.
+
+Se deja como opción al lector el investigar el resto de funciones de esta librería, entre las que se encuentran **wCBA**, **mineCARs**, y **CBA.object**.
+
+<style>
+
+.main-container {
+max-width: 96%;
+margin-left: auto;
+margin-right: auto;
+}
+
+pre:not([class]) {
+background-color: rgba(197, 100, 206, 0.53);
+}
+
+blockquote {
+  color: black;
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 25.5px;
+  background-color: white;
+}
+
+div#header, header{
+  border-bottom: 1px solid #aaa;
+  margin-bottom: 0.5em;
+}
+
+.title,.author, .date{
+  text-align: center;
+}
+
+div#TOC, nav#TOC{
+  border-bottom: 1px solid #aaa;
+  margin-bottom: 0.5em;
+}
+
+h1, h2, h3, h4, h5, h6{
+    font-family: "Helvetica Neue", Helvetica, "Liberation Sans", Calibri, Arial, sans-serif;
+    font-family: "Liberation Serif", "Georgia", "Times New Roman", serif;
+    page-break-after: avoid;
+}
+
+div div, section section {
+    margin-left: 2em;
+}
+
+li > p {
+ margin-top: 1em; 
+}
+
+a {
+  text-decoration: none;
+}
+
+@media screen{
+    a:hover{
+      text-decoration: underline;
+    }
+}
+
+img{
+  vertical-align: middle;
+}
+
+div.figure{
+  /* Center the image and caption */
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  font-style: italic;
+}
+
+pre, code {
+  background-color: rgb(34, 209, 183);
+  white-space: pre-wrap; /* css-3 */
+  white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
+  white-space: -pre-wrap; /* Opera 4-6 */
+  white-space: -o-pre-wrap; /* Opera 7 */
+  word-wrap: break-word; /* Internet Explorer 5.5+ */
+}
+
+pre{
+  /* Distinguish pre blocks from other text by more than the font with a background tint. */
+  padding: 0.5em; /* Since we have a background color */
+  border-radius: 5px; /* Softens it */
+  /* Give it a some definition */
+  border: 1px solid #aaa;
+}
+
+@media screen
+    {
+    pre
+        {
+        white-space: pre;
+        overflow: auto;
+        border: 1px dotted #777;
+        }
+    }
+
+p > code, li > code
+    {
+    padding-left:  2px;
+    padding-right: 2px;
+    }
+    
+li > p code 
+    {
+    padding: 2px;
+    }
+
+
+table
+    {
+    border-collapse: collapse;
+    border-spacing: 0; /* IE 6 */
+
+    border-bottom: 2pt solid #000;
+    border-top: 2pt solid #000; /* The caption on top will not have a bottom-border */
+
+    /* Center */
+    margin-left: auto;
+    margin-right: auto;
+    }
+    
+thead 
+    {
+    border-bottom: 1pt solid #000;
+    background-color: #eee; 
+    }
+
+tr.odd:hover, tr.even:hover /* Use .odd and .even classes to avoid styling rows in other tables */
+    {
+  background-color: #eee;
+}
+
+
+td, th 
+    { 
+    vertical-align: top; 
+    vertical-align: baseline; 
+    padding-left:   0.5em;
+    padding-right:  0.5em;
+    padding-top:    0.2em;
+    padding-bottom: 0.2em;
+    }
+    
+tr td:last-child, tr th:last-child
+    {
+    padding-right: 0;
+    }
+tr td:first-child, tr th:first-child 
+    {
+    padding-left: 0;
+    }
+
+
+th 
+    {
+    font-weight: bold; 
+    }
+
+caption 
+    {
+    caption-side: top;
+    border: none;
+    font-size: 0.9em;
+    font-style: italic;
+    text-align: center;
+    margin-bottom: 0.3em;
+    padding-bottom: 0.2em;
+    }
+
+dl 
+    {
+    border-top: 2pt solid black;
+    padding-top: 0.5em;
+    border-bottom: 2pt solid black;
+    }
+
+dt 
+    {
+    font-weight: bold;
+    }
+
+dd+dt /* 2nd or greater term in the list */
+    {
+    border-top: 1pt solid black;
+    padding-top: 0.5em;
+    }
+    
+dd /* A definition */
+    {
+    margin-bottom: 0.5em;
+    }
+
+dd+dd /* 2nd or greater definition of a term */
+    {
+    border-top: 1px solid black; /* To separate multiple definitions */
+    }
+    
+</style>
